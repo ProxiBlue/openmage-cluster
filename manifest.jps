@@ -1,36 +1,25 @@
 jpsType: install
 jpsVersion: '1.4'
-id: magento-cluster
-homepage: https://github.com/jelastic-jps/magento-cluster/tree/master
+id: openmage-cluster
+homepage: https://github.com/proxiblue/openmage-cluster/tree/main
 description:
-  text: Auto-scalable and highly-available Magento eCommerce cluster with out-of-box
+  text: Auto-scalable and highly-available OpenMage eCommerce cluster with out-of-box
     auto-scaling, even load and traffic distribution, master-master data replication,
     page caching and user session storage on certified Jelastic dockerized stack templates.
-  short: Auto-scalable and highly-available Magento cluster with load balancing, data
+  short: Auto-scalable and highly-available OpenMage cluster with load balancing, data
     replication, content caching and user session storage.
 categories:
 - apps/clusters
 - apps/e-commerce
-logo: https://raw.githubusercontent.com/jelastic-jps/magento/master/magento21-php7-varnish-memcache-storage/images/magento.png
-name: Auto-Scalable Magento Cluster
-
-settings:
-  fields:
-    name: magento_version
-    caption: Magento version
-    type: list
-    values:
-      https://download.jelastic.com/public.php?service=files&t=9eb5418967ddb3bcf4b575e467d33ea0&download: Magento CE 2.3.x
-      https://download.jelastic.com/public.php?service=files&t=61ae85fbcfc249b4e63bd38efbb8945f&download: Magento CE 1.9.4.x
-      https://github.com/OpenMage/magento-lts/archive/refs/tags/v20.0.8.tar.gz: OpenMage 20.0.8
-    default: https://github.com/OpenMage/magento-lts/archive/refs/tags/v20.0.8.tar.gz
+logo: https://raw.githubusercontent.com/ProxiBlue/openmage-cluster/main/images/57708.png
+name: Auto-Scalable OpenMage Cluster
 
 globals:
-  PATH: https://raw.githubusercontent.com/jelastic-jps/magento-cluster/master
+  PATH: https://raw.githubusercontent.com/ProxiBlue/openmage-cluster/main
   MAGE_ROOT: "/var/www/webroot/ROOT"
   DB_USER: jelastic-${fn.random}
   DB_PASS: "${fn.password(20)}"
-  DB_NAME: magento
+  DB_NAME: openmage
   RD_PASS: "${fn.password(10)}"
   ADMIN_PASSWD: "${fn.password(10)}"
 
@@ -93,7 +82,7 @@ onAfterScaleOut[nodeGroup:bl]:
 
 onInstall:
 - log: Auto Scaling Triggers
-- script: https://raw.githubusercontent.com/jelastic-jps/magento-cluster/master/scripts/addTriggers.js
+- script: https://raw.githubusercontent.com/ProxiBlue/openmage-cluster/main/scripts/addTriggers.js
   params: 
     nodeGroup: cp
     resourceType: CPU
@@ -132,35 +121,22 @@ onInstall:
 
 - log: Downloading, Unpacking, Installation and Patching Magento
 - cmd[storage]:
-  - rm -rf /data/* && curl -fsSL "${settings.magento_version}" | tar xj -C /data/  
+  - mkdir -p /data/
   - chown 700:700 -Rh /data/
-
-- if (/61ae85fbcfc249b4e63bd38efbb8945f/.test("${settings.magento_version}")):
-    - cmd[storage]: wget ${globals.PATH}/configs/magento/local.xml.template -O /data/app/etc/local.xml.template
-    - setupRDConnect:
-        config: /data/app/etc/local.xml.template
-    - cmd[cp]: wget ${globals.PATH}/configs/nginx/site-default-mg19.conf -O /etc/nginx/conf.d/site-default.conf
-    - setupCP
-    - cmd[${nodes.cp.first.id}]:
-        - wget ${globals.PATH}/configs/varnish/varnish-probe.php -O ${globals.MAGE_ROOT}/health_check.php
-        - wget ${globals.PATH}/scripts/setupMG19.sh -O /tmp/setupMG19.sh && bash -x /tmp/setupMG19.sh
-          ${globals.DB_USER} ${globals.DB_PASS} DB_MASTER ${globals.DB_NAME} ${globals.ADMIN_PASSWD}
-          ${globals.MAGE_ROOT} ${env.url} ${user.email} &>> /var/log/run.log
-
-- if (/9eb5418967ddb3bcf4b575e467d33ea0/.test("${settings.magento_version}")):
-    - cmd[cp]: wget ${globals.PATH}/configs/nginx/site-default-mg2.conf -O /etc/nginx/conf.d/site-default.conf
-    - setupCP
-    - cmd[${nodes.cp.first.id}]:
-        - wget ${globals.PATH}/configs/varnish/varnish-probe.php -O ${globals.MAGE_ROOT}/pub/health_check.php
-        - wget ${globals.PATH}/scripts/setupMG2.sh -O /tmp/setupMG2.sh && bash -x /tmp/setupMG2.sh
-          ${globals.DB_USER} ${globals.DB_PASS} DB_MASTER ${globals.DB_NAME} ${globals.ADMIN_PASSWD}
-          ${globals.MAGE_ROOT} ${env.url} ${user.email} &>> /var/log/run.log
-        - wget ${globals.PATH}/configs/magento/env.php -O ${globals.MAGE_ROOT}/app/etc/env.php
-        - sed -ri 's|_DBNAME_|${globals.DB_NAME}|g' ${globals.MAGE_ROOT}/app/etc/env.php
-        - sed -ri 's|_DBUSER_|${globals.DB_USER}|g' ${globals.MAGE_ROOT}/app/etc/env.php
-        - sed -ri 's|_DBPASS_|${globals.DB_PASS}|g' ${globals.MAGE_ROOT}/app/etc/env.php
-    - setupRDConnect:
-        config: /data/app/etc/env.php
+- cmd[${nodes.cp.first.id}]:
+    - wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet
+    - cd /data
+    - composer require openmage/magento-lts":"^20.0"
+- cmd[storage]: wget ${globals.PATH}/configs/magento/local.xml.template -O /data/app/etc/local.xml.template
+- setupRDConnect:
+    config: /data/app/etc/local.xml.template
+- cmd[cp]: wget ${globals.PATH}/configs/nginx/site-default-openmage.conf -O /etc/nginx/conf.d/site-default.conf
+- setupCP
+- cmd[${nodes.cp.first.id}]:
+    - wget ${globals.PATH}/configs/varnish/varnish-probe.php -O ${globals.MAGE_ROOT}/health_check.php
+    - wget ${globals.PATH}/scripts/setupOpenMage.sh -O /tmp/setup.sh && bash -x /tmp/setup.sh
+      ${globals.DB_USER} ${globals.DB_PASS} DB_MASTER ${globals.DB_NAME} ${globals.ADMIN_PASSWD}
+      ${globals.MAGE_ROOT} ${env.url} ${user.email} &>> /var/log/run.log
 
 actions:
   setupCP:
