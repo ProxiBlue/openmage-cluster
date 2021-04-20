@@ -22,7 +22,8 @@ settings:
     values:
       https://download.jelastic.com/public.php?service=files&t=9eb5418967ddb3bcf4b575e467d33ea0&download: Magento CE 2.3.x
       https://download.jelastic.com/public.php?service=files&t=61ae85fbcfc249b4e63bd38efbb8945f&download: Magento CE 1.9.4.x
-    default: https://download.jelastic.com/public.php?service=files&t=9eb5418967ddb3bcf4b575e467d33ea0&download
+      https://github.com/OpenMage/magento-lts/archive/refs/tags/v20.0.8.tar.gz
+    default: https://github.com/OpenMage/magento-lts/archive/refs/tags/v20.0.8.tar.gz
 
 globals:
   PATH: https://raw.githubusercontent.com/jelastic-jps/magento-cluster/master
