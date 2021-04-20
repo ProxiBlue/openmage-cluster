@@ -119,15 +119,17 @@ onInstall:
       custom_conf: "${globals.PATH}/configs/mysql/db.cnf"
     nodeGroup: sqldb
 
-- log: Downloading, Unpacking, Installation and Patching Magento
+- log: Downloading, Unpacking, Installation and Patching OpenMage
 - cmd[storage]:
   - mkdir -p /data/
   - chown 700:700 -Rh /data/
 - cmd[${nodes.cp.first.id}]:
-    - wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet
-    - cd /data
-    - composer require openmage/magento-lts":"^20.0"
-- cmd[storage]: wget ${globals.PATH}/configs/magento/local.xml.template -O /data/app/etc/local.xml.template
+    - yum install composer
+    - composer self-update --1
+    - cd ${globals.MAGE_ROOT}
+    - wget ${globals.PATH}/configs/openmage/composer.json -O ${globals.MAGE_ROOT}/composer.json
+    - composer update
+- cmd[storage]: wget ${globals.PATH}/configs/openmage/local.xml.template -O /data/app/etc/local.xml.template
 - setupRDConnect:
     config: /data/app/etc/local.xml.template
 - cmd[cp]: wget ${globals.PATH}/configs/nginx/site-default-openmage.conf -O /etc/nginx/conf.d/site-default.conf

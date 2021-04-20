@@ -23,7 +23,7 @@ php -f ${MG_PATH}/install.php -- \
 --db_pass ${DB_PASS} \
 --url ${ENV_URL} \
 --skip_url_validation "yes" \
---use_rewrites "no" \
+--use_rewrites "yes" \
 --use_secure "no" \
 --secure_base_url "" \
 --use_secure_admin "no" \

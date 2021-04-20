@@ -1,0 +1,10 @@
+{
+  "require": {
+    "aydin-hassan/magento-core-composer-installer": "*",
+    "openmage/magento-lts": "^20.0"
+  },
+  "extra": {
+    "magento-core-package-type": "magento-source",
+    "magento-root-dir": "/var/www/webroot/ROOT"
+  }
+}

@@ -1,6 +1,7 @@
-# Auto-Scalable Magento or OpenMage Cluster
+# Auto-Scalable OpenMage Cluster
+# Derived from https://github.com/jelastic-jps/magento-cluster
 
-Magento, PHP based eCommerce platform, is packaged as an advanced highly reliable and auto-scalable cluster on top of certified Jelastic dockerized stack templates with the following topology:
+OpenMage, PHP based eCommerce platform, is packaged as an advanced highly reliable and auto-scalable cluster on top of certified Jelastic dockerized stack templates with the following topology:
 
 - **Varnish** load balancer is supplemented with **NGINX** server as HTTPS proxy
 - **Scalable NGINX PHP** application servers with preconfigured [automatic horizontal scaling](https://docs.jelastic.com/automatic-horizontal-scaling) to handle load spikes
