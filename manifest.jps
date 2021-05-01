@@ -29,7 +29,7 @@ globals:
 
 settings:
   fields:
-  - caption: Select Locale
+  - caption: "Select Locale"
     type: list
     values:
         value1: en_US
@@ -37,7 +37,8 @@ settings:
         value3: en_AU
     required: true
     name: LOCALE
-  - caption Select Timezone
+
+  - caption: "Select Timezone"
     type: list
     values:
         value1: "America/Los_Angeles"
@@ -45,12 +46,12 @@ settings:
         value3: "Australia/Sydney"
     required: true
     name: TIMEZONE
-  - caption: Install Let's Encrypt SSL with Auto-Renewal
-        type: checkbox
-        name: le_addon
-        value: true
-        disabled: true
-        tooltip: "Advanced integration with Let's Encrypt certificate authority that simplifies and automates the process of issuing, configuring and renewing trusted SSL certificates."
+  - caption: "Install Let's Encrypt SSL with Auto-Renewal"
+    type: checkbox
+    name: le_addon
+    value: true
+    disabled: true
+    tooltip: "Advanced integration with Let's Encrypt certificate authority that simplifies and automates the process of issuing, configuring and renewing trusted SSL certificates."
 
 success:
 text: |
