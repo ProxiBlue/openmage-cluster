@@ -128,16 +128,6 @@ onInstall:
       nodeGroup: bl
 - setGlobals:
         protocol: https
-- install:
-    jps: https://github.com/jelastic-jps/lets-encrypt/blob/stage/manifest.jps
-    envName: ${env.envName}
-    nodeGroup: bl
-    skipEmail: true
-    settings:
-      customDomains: ${env.domain}
-      fallbackToX1: true
-      webroot: true
-      webrootPath: $(globals.MAGE_ROOT)
 - log: Auto Scaling Triggers
 - script: https://raw.githubusercontent.com/ProxiBlue/openmage-cluster/main/scripts/addTriggers.js
   params: 
@@ -204,6 +194,16 @@ onInstall:
 - setupRDConnect:
     config: /data/app/etc/local.xml.template
 - setupCP
+- install:
+    jps: https://github.com/jelastic-jps/lets-encrypt/blob/stage/manifest.jps
+    envName: ${env.envName}
+    nodeGroup: bl
+    skipEmail: true
+    settings:
+      customDomains: ${env.domain}
+      fallbackToX1: true
+      webroot: true
+      webrootPath: $(globals.MAGE_ROOT)
 - cmd[${nodes.cp.first.id}]:
     - wget ${globals.PATH}/configs/varnish/varnish-probe.php -O ${globals.MAGE_ROOT}/health_check.php
     - wget ${globals.PATH}/scripts/setupOpenMage.sh -O /tmp/setup.sh
