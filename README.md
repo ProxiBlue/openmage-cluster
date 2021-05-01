@@ -1,6 +1,8 @@
 # Auto-Scalable OpenMage Cluster
 # Derived from https://github.com/jelastic-jps/magento-cluster
 
+** Untested in production - use at own risk **
+
 OpenMage, PHP based eCommerce platform, is packaged as an advanced highly reliable and auto-scalable cluster on top of certified Jelastic dockerized stack templates with the following topology:
 
 - **Varnish** load balancer is supplemented with **NGINX** server as HTTPS proxy
@@ -23,11 +25,17 @@ Click the **Deploy** button below, specify your email address within the widget,
 
 *Note:* If you are already registered at Jelastic, you can deploy this cluster by importing [the package manifest raw link](https://raw.githubusercontent.com/ProxiBlue/openmage-cluster/main/manifest.jps) within the dashboard using 'IMPORT'
 
+<p align="center"> 
+<img src="https://github.com/ProxiBlue/openmage-cluster/blob/main/images/import.png" width="400">
+</p>
+
 
 ## Installation Process
 In the opened confirmation window at Jelastic dashboard: 
 
-(images/import.png)
+<p align="center"> 
+<img src="https://github.com/ProxiBlue/openmage-cluster/blob/main/images/settings.png" width="400">
+</p>
 
 * type the *Environment* name, 
 * optionally, customize its [Display Name](https://docs.jelastic.com/environment-aliases). 
