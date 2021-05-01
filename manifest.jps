@@ -25,7 +25,34 @@ globals:
   ROOT_PASSWD: "${fn.password(20)}"
   NGINX_PASSWD: "${fn.password(20)}"
   ADMIN_URL: admin_${fn.random}
+  ADMIN_USER: admin-${fn.random}
 
+settings:
+  fields:
+  - caption: Select Locale
+    type: list
+    values:
+        value1: en_US
+        value2: en_GB
+        value3: en_AU
+    required: true
+    name: LOCALE
+  - caption Select Timezone
+    type: list
+    values:
+        value1: "America/Los_Angeles"
+        value2: "Europe/London"
+        value3: "Australia/Sydney"
+    required: true
+    name: TIMEZONE
+  - caption: Install Let's Encrypt SSL with Auto-Renewal
+        type: checkbox
+        name: le_addon
+        value: true
+        disabled: true
+        tooltip: "Advanced integration with Let's Encrypt certificate authority that simplifies and automates the process of issuing, configuring and renewing trusted SSL certificates."
+
+success:
 text: |
     ## Environment details.
 
@@ -33,7 +60,7 @@ text: |
 
     * URL: ${env.protocol}://${env.domain}
     * Admin panel URL: ${env.protocol}://${env.domain}/${globals.ADMIN_URL}
-    * Admin name: admin
+    * Admin name: ${globals.ROOT_PASSWD}
     * Admin password: ${globals.ADMIN_PASSWD}
     * ROOT Password on Web Nodes: ${globals.ROOT_PASSWD}
     * NGINX Password on web nodes: ${globals.NGINX_PASSWD}
@@ -156,6 +183,19 @@ onInstall:
       - echo ${globals.NGINX_PASSWD}| passwd --stdin nginx &>> /var/log/run.log
     user: root
 - composerOpenMage
+- if ('${settings.le_addon:false}' == 'true'):
+    - setGlobals:
+        protocol: https
+    - install:
+        jps: https://github.com/jelastic-jps/lets-encrypt/blob/stage/manifest.jps?_r=${fn.random}
+        envName: ${settings.envName}-1
+        nodeGroup: bl
+        skipEmail: true
+        settings:
+          customDomains: ${globals.domain}
+          fallbackToX1: true
+          webroot: true
+          webrootPath: /var/www/webroot/ROOT
 - cmd[storage]: wget ${globals.PATH}/configs/openmage/local.xml.template -O /data/app/etc/local.xml.template
 - setupRDConnect:
     config: /data/app/etc/local.xml.template
@@ -163,7 +203,7 @@ onInstall:
 - cmd[${nodes.cp.first.id}]:
     - wget ${globals.PATH}/configs/varnish/varnish-probe.php -O ${globals.MAGE_ROOT}/health_check.php
     - wget ${globals.PATH}/scripts/setupOpenMage.sh -O /tmp/setup.sh
-    - bash -x /tmp/setup.sh ${globals.DB_USER} ${globals.DB_PASS} DB_MASTER ${globals.DB_NAME} ${globals.ADMIN_PASSWD} ${globals.MAGE_ROOT} ${env.url} ${user.email} ${globals.PATH} ${globals.ADMIN_URL}&>> /var/log/run.log
+    - bash -x /tmp/setup.sh ${globals.DB_USER} ${globals.DB_PASS} DB_MASTER ${globals.DB_NAME} ${globals.ADMIN_PASSWD} ${globals.MAGE_ROOT} ${env.url} ${user.email} ${globals.ADMIN_URL} ${globals.ADMIN_USER} ${settings.LOCALE} ${settings.TIMEZONE} &>> /var/log/run.log
 
 actions:
   composerOpenMage:

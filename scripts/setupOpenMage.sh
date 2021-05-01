@@ -11,12 +11,15 @@ MG_PATH=$6
 ENV_URL=$7
 USER_EMAIL=$8
 ADMIN_FRONTNAME=$9
+ADMIN_USER=$10
+LOCALE=$11
+TIMEZONE=$12
 
 $MYSQL -u${DB_USER} -p${DB_PASS} -h ${DB_HOST} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
 php -f ${MG_PATH}/install.php -- \
 --license_agreement_accepted "yes" \
---locale "en_US" \
---timezone "America/Los_Angeles" \
+--locale "${LOCALE}" \
+--timezone "${TIMEZONE}" \
 --default_currency "USD" \
 --db_host ${DB_HOST} \
 --db_name ${DB_NAME} \
@@ -31,7 +34,7 @@ php -f ${MG_PATH}/install.php -- \
 --admin_firstname Admin \
 --admin_lastname AdminLast \
 --admin_email ${USER_EMAIL} \
---admin_username admin \
+--admin_username ${ADMIN_USER} \
 --admin_password ${MG_ADMIN} \
 --admin_frontname ${ADMIN_FRONTNAME};
 #$SED -i 's|getBlock(\$callback\[0\])->\$callback\[1\]|getBlock(\$callback\[0\])->{\$callback\[1\]}|g' ${MG_PATH}/app/code/core/Mage/Core/Model/Layout.php;
