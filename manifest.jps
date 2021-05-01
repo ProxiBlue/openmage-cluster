@@ -21,22 +21,35 @@ globals:
   DB_PASS: "${fn.password(20)}"
   DB_NAME: openmage
   RD_PASS: "${fn.password(10)}"
-  ADMIN_PASSWD: "${fn.password(10)}"
+  ADMIN_PASSWD: "${fn.password(20)}"
+  ROOT_PASSWD: "${fn.password(20)}"
+  NGINX_PASSWD: "${fn.password(20)}"
+  ADMIN_URL: admin_${fn.random}
 
-success: 'Below you will find your admin panel URL, username and password.</br></br>
-  <table style=''font-size:13px; border: none;''><tr><td>Admin panel URL:</td><td
-  style=''padding-left: 10px;''><a href=''${env.protocol}://${env.domain}/admin/''
-  target=''_blank''>${env.protocol}://${env.domain}/admin/</a></td></tr>  <tr><td>Admin
-  name:</td><td style=''padding-left: 10px;''>admin</td></tr><tr><td>Password:</td><td
-  style=''padding-left: 10px;''>${globals.ADMIN_PASSWD}</td></tr></table></br>To add
-  a custom domain name for your Magento Cluster installation, follow the steps described
-  in our <a href=''http://docs.jelastic.com/custom-domains'' target=''_blank''>documentation</a>'
+text: |
+    ## Environment details.
+
+    # store this information!!!!
+
+    * URL: ${env.protocol}://${env.domain}
+    * Admin panel URL: ${env.protocol}://${env.domain}/${globals.ADMIN_URL}
+    * Admin name: admin
+    * Admin password: ${globals.ADMIN_PASSWD}
+    * ROOT Password on Web Nodes: ${globals.ROOT_PASSWD}
+    * NGINX Password on web nodes: ${globals.NGINX_PASSWD}
+    * DB USER: ${globals.DB_USER}
+    * DB_NAME: openmage
+    * DB_PASS: ${globals.DB_PASS}
+    * RD_PASS: ${globals.RD_PASS}
+
+    To add a custom domain name for your Magento Cluster installation, follow the steps described
+    in our documentation: http://docs.jelastic.com/custom-domains
 
 ssl: false
 skipNodeEmails: true
 nodes:
 - nodeType: nginxphp-dockerized
-  tag: 1.16.1-php-7.2.29
+  tag: 1.18.0-php-7.3.21
   count: 2
   cloudlets: 16
   nodeGroup: cp
@@ -119,13 +132,29 @@ onInstall:
       custom_conf: "${globals.PATH}/configs/mysql/db.cnf"
     nodeGroup: sqldb
 
-- log: Downloading, Unpacking, Installation and Patching OpenMage
+- log: setup storage
 - cmd[storage]:
   - mkdir -p /data/
   - chown 700:700 -Rh /data/
-- forEach(i:nodes.cp):
+- log: Install composer
+- forEach(nodes.cp):
     cmd[${this.filter}]:
-    - yum -y install composer && composer self-update --1
+      - yum install composer
+    user: root
+- log: Downgrade composer
+- forEach(nodes.cp):
+    cmd[${this.filter}]:
+      - composer self-update --1
+    user: root
+- log: Set root password
+- forEach(nodes.cp):
+    cmd[${this.filter}]:
+      - echo ${globals.ROOT_PASSWD}| passwd --stdin root &>> /var/log/run.log
+    user: root
+- forEach(nodes.cp):
+    cmd[${this.filter}]:
+      - echo ${globals.NGINX_PASSWD}| passwd --stdin nginx &>> /var/log/run.log
+    user: root
 - composerOpenMage
 - cmd[storage]: wget ${globals.PATH}/configs/openmage/local.xml.template -O /data/app/etc/local.xml.template
 - setupRDConnect:
@@ -133,9 +162,8 @@ onInstall:
 - setupCP
 - cmd[${nodes.cp.first.id}]:
     - wget ${globals.PATH}/configs/varnish/varnish-probe.php -O ${globals.MAGE_ROOT}/health_check.php
-    - wget ${globals.PATH}/scripts/setupOpenMage.sh -O /tmp/setup.sh && bash -x /tmp/setup.sh
-      ${globals.DB_USER} ${globals.DB_PASS} DB_MASTER ${globals.DB_NAME} ${globals.ADMIN_PASSWD}
-      ${globals.MAGE_ROOT} ${env.url} ${user.email} ${globals.PATH} &>> /var/log/run.log
+    - wget ${globals.PATH}/scripts/setupOpenMage.sh -O /tmp/setup.sh
+    - bash -x /tmp/setup.sh ${globals.DB_USER} ${globals.DB_PASS} DB_MASTER ${globals.DB_NAME} ${globals.ADMIN_PASSWD} ${globals.MAGE_ROOT} ${env.url} ${user.email} ${globals.PATH} ${globals.ADMIN_URL}&>> /var/log/run.log
 
 actions:
   composerOpenMage:

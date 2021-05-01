@@ -10,6 +10,7 @@ MG_ADMIN=$5
 MG_PATH=$6
 ENV_URL=$7
 USER_EMAIL=$8
+ADMIN_FRONTNAME=$9
 
 $MYSQL -u${DB_USER} -p${DB_PASS} -h ${DB_HOST} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
 php -f ${MG_PATH}/install.php -- \
@@ -31,7 +32,8 @@ php -f ${MG_PATH}/install.php -- \
 --admin_lastname AdminLast \
 --admin_email ${USER_EMAIL} \
 --admin_username admin \
---admin_password ${MG_ADMIN};
+--admin_password ${MG_ADMIN} \
+--admin_frontname ${ADMIN_FRONTNAME};
 #$SED -i 's|getBlock(\$callback\[0\])->\$callback\[1\]|getBlock(\$callback\[0\])->{\$callback\[1\]}|g' ${MG_PATH}/app/code/core/Mage/Core/Model/Layout.php;
 $SED -i 's|false|true|g' ${MG_PATH}/app/etc/modules/Cm_RedisSession.xml;
 $MYSQL -u${DB_USER} -p${DB_PASS} -h ${DB_HOST} -e "INSERT INTO ${DB_NAME}.core_config_data (path,value) VALUES ('admin/security/validate_formkey_checkout',1);";
