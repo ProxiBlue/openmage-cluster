@@ -125,8 +125,7 @@ onInstall:
   - chown 700:700 -Rh /data/
 - forEach(i:nodes.cp):
     cmd[${this.filter}]:
-    - yum install composer
-    - composer self-update --1
+    - yum -y install composer && composer self-update --1
 - composerOpenMage
 - cmd[storage]: wget ${globals.PATH}/configs/openmage/local.xml.template -O /data/app/etc/local.xml.template
 - setupRDConnect:
