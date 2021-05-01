@@ -9,21 +9,31 @@ OpenMage, PHP based eCommerce platform, is packaged as an advanced highly reliab
 - **Redis Sessions** node to retain user session parameters
 - **Redis Cache** node for content cache storing
 - [**Elastic Data Storage**](https://docs.jelastic.com/data-storage-container) node for media files
+- PHP 7.4
+- Lets Encrypt for SSL
+
 <p align="center"> 
 <img src="https://github.com/jelastic-jps/magento-cluster/blob/master/images/magento-topology.png" width="400">
 </p>
 
-More details can be found at the article [Running Auto-Scalable Magento Platform in Containers](https://jelastic.com/blog/auto-scalable-magento-cluster-in-containers/).
-
 ## Deployment to the Cloud
 Click the **Deploy** button below, specify your email address within the widget, choose one of the [Jelastic Public Cloud providers](https://jelastic.com/install-application/?manifest=https://raw.githubusercontent.com/jelastic-jps/magento-cluster/master/manifest.jps&keys=app.jelastic.eapps.com;app.cloud.hostnet.nl;app.jelastichosting.nl;app.appengine.flow.ch;app.jelasticlw.com.br;app.mircloud.host;app.jcs.opusinteractive.io;app.paas.quarinet.eu) and press **Install**.
 
-[![Deploy](images/deploy-to-jelastic.png)](https://jelastic.com/install-application/?manifest=https://raw.githubusercontent.com/jelastic-jps/magento-cluster/master/manifest.jps&keys=app.jelastic.elastx.net;app.milesweb.cloud;app.jelastic.eapps.com;app.jelastic.saveincloud.net&filter=auto_cluster)
+[![Deploy](images/deploy-to-jelastic.png)](https://jelastic.com/install-application/?manifest=https://raw.githubusercontent.com/ProxiBlue/openmage-cluster/main/manifest.jps)
 
-*Note:* If you are already registered at Jelastic, you can deploy this cluster by importing [the package manifest raw link](https://raw.githubusercontent.com/jelastic-jps/magento-cluster/master/manifest.jps) within the dashboard.
+*Note:* If you are already registered at Jelastic, you can deploy this cluster by importing [the package manifest raw link](https://raw.githubusercontent.com/ProxiBlue/openmage-cluster/main/manifest.jps) within the dashboard using 'IMPORT'
+
 
 ## Installation Process
-In the opened confirmation window at Jelastic dashboard, type the *Environment* name, optionally, customize its [Display Name](https://docs.jelastic.com/environment-aliases). Then, select the preferable [region](https://docs.jelastic.com/environment-regions) (if several are available) and click on **Install**.
+In the opened confirmation window at Jelastic dashboard: 
+
+(images/import.png)
+
+* type the *Environment* name, 
+* optionally, customize its [Display Name](https://docs.jelastic.com/environment-aliases). 
+* set the OpenMage Locale, Timezone and Currency
+
+Then, select the preferable [region](https://docs.jelastic.com/environment-regions) (if several are available in your jelastic environment) and click on **Install**.
 
 <p align="center"> 
 <img src="https://github.com/jelastic-jps/magento-cluster/blob/master/images/magento-installation.png" width="400">
