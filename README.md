@@ -13,6 +13,7 @@ OpenMage, PHP based eCommerce platform, is packaged as an advanced highly reliab
 - [**Elastic Data Storage**](https://docs.jelastic.com/data-storage-container) node for media files
 - PHP 7.4
 - Lets Encrypt for SSL
+- Dynamic Admin Url for security
 
 <p align="center"> 
 <img src="https://github.com/ProxiBlue/openmage-cluster/blob/main/images/topology.png" width="400">

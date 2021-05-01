@@ -45,35 +45,34 @@ settings:
         value3: "Australia/Sydney"
     required: true
     name: TIMEZONE
-  - caption: "Install Let's Encrypt SSL with Auto-Renewal"
+  - caption: "Select Currency"
     type: list
     values:
-        value1: "yes"
-        value2: "no"
-    name: LE_ADDON
+        value1: USD
+        value2: GBP
+        value3: AUD
     required: true
-    value: yes
-    tooltip: "Advanced integration with Let's Encrypt certificate authority that simplifies and automates the process of issuing, configuring and renewing trusted SSL certificates."
+    name: CURRENCY
 
 success:
-text: |
-    ## Environment details.
+    text: |
+        # Environment details.
 
-    # store this information!!!!
+        ## store this information!!!!
 
-    * URL: ${env.protocol}://${env.domain}
-    * Admin panel URL: ${env.protocol}://${env.domain}/${globals.ADMIN_URL}
-    * Admin name: ${globals.ROOT_PASSWD}
-    * Admin password: ${globals.ADMIN_PASSWD}
-    * ROOT Password on Web Nodes: ${globals.ROOT_PASSWD}
-    * NGINX Password on web nodes: ${globals.NGINX_PASSWD}
-    * DB USER: ${globals.DB_USER}
-    * DB_NAME: openmage
-    * DB_PASS: ${globals.DB_PASS}
-    * RD_PASS: ${globals.RD_PASS}
+        * URL: ${env.protocol}://${env.domain}
+        * Admin panel URL: ${env.protocol}://${env.domain}/${globals.ADMIN_URL}
+        * Admin name: ${globals.ROOT_PASSWD}
+        * Admin password: ${globals.ADMIN_PASSWD}
+        * ROOT Password on Web Nodes: ${globals.ROOT_PASSWD}
+        * NGINX Password on web nodes: ${globals.NGINX_PASSWD}
+        * DB USER: ${globals.DB_USER}
+        * DB_NAME: openmage
+        * DB_PASS: ${globals.DB_PASS}
+        * RD_PASS: ${globals.RD_PASS}
 
-    To add a custom domain name for your Magento Cluster installation, follow the steps described
-    in our documentation: http://docs.jelastic.com/custom-domains
+        To add a custom domain name for your Magento Cluster installation, follow the steps described
+        in our documentation: http://docs.jelastic.com/custom-domains
 
 ssl: false
 skipNodeEmails: true
@@ -124,6 +123,21 @@ onAfterScaleOut[nodeGroup:bl]:
     setNodeDisplayName [${@i.id}]: Load balancer
 
 onInstall:
+- setExtIpEnabled:
+    - enabled: true
+      nodeGroup: bl
+- setGlobals:
+        protocol: https
+- install:
+    jps: https://github.com/jelastic-jps/lets-encrypt/blob/stage/manifest.jps
+    envName: ${env.envName}
+    nodeGroup: bl
+    skipEmail: true
+    settings:
+      customDomains: ${env.domain}
+      fallbackToX1: true
+      webroot: true
+      webrootPath: $(globals.MAGE_ROOT)
 - log: Auto Scaling Triggers
 - script: https://raw.githubusercontent.com/ProxiBlue/openmage-cluster/main/scripts/addTriggers.js
   params: 
@@ -186,19 +200,6 @@ onInstall:
       - echo ${globals.NGINX_PASSWD}| passwd --stdin nginx &>> /var/log/run.log
     user: root
 - composerOpenMage
-- if ('${settings.LE_ADDON}' == 'yes'):
-    - setGlobals:
-        protocol: https
-    - install:
-        jps: https://github.com/jelastic-jps/lets-encrypt/blob/stage/manifest.jps?_r=${fn.random}
-        envName: ${env.envName}
-        nodeGroup: bl
-        skipEmail: true
-        settings:
-          customDomains: ${globals.domain}
-          fallbackToX1: true
-          webroot: true
-          webrootPath: /var/www/webroot/ROOT
 - cmd[storage]: wget ${globals.PATH}/configs/openmage/local.xml.template -O /data/app/etc/local.xml.template
 - setupRDConnect:
     config: /data/app/etc/local.xml.template
@@ -206,7 +207,7 @@ onInstall:
 - cmd[${nodes.cp.first.id}]:
     - wget ${globals.PATH}/configs/varnish/varnish-probe.php -O ${globals.MAGE_ROOT}/health_check.php
     - wget ${globals.PATH}/scripts/setupOpenMage.sh -O /tmp/setup.sh
-    - bash -x /tmp/setup.sh ${globals.DB_USER} ${globals.DB_PASS} DB_MASTER ${globals.DB_NAME} ${globals.ADMIN_PASSWD} ${globals.MAGE_ROOT} ${env.url} ${user.email} ${globals.ADMIN_URL} ${globals.ADMIN_USER} ${settings.LOCALE} ${settings.TIMEZONE} ${settings.LE_ADDON} &>> /var/log/run.log
+        - bash -x /tmp/setup.sh ${globals.DB_USER} ${globals.DB_PASS} DB_MASTER ${globals.DB_NAME} ${globals.ADMIN_PASSWD} ${globals.MAGE_ROOT} ${env.url} ${user.email} ${globals.ADMIN_URL} ${globals.ADMIN_USER} ${settings.LOCALE} ${settings.TIMEZONE} ${settings.CURRENCY} &>> /var/log/run.log
 
 actions:
   composerOpenMage:
