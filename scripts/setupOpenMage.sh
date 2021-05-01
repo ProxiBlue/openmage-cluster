@@ -14,6 +14,7 @@ ADMIN_FRONTNAME=$9
 ADMIN_USER=$10
 LOCALE=$11
 TIMEZONE=$12
+SSL=$13
 
 $MYSQL -u${DB_USER} -p${DB_PASS} -h ${DB_HOST} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
 php -f ${MG_PATH}/install.php -- \
@@ -28,9 +29,9 @@ php -f ${MG_PATH}/install.php -- \
 --url ${ENV_URL} \
 --skip_url_validation "yes" \
 --use_rewrites "yes" \
---use_secure "no" \
+--use_secure "${SSL}" \
 --secure_base_url "" \
---use_secure_admin "no" \
+--use_secure_admin "${SSL}" \
 --admin_firstname Admin \
 --admin_lastname AdminLast \
 --admin_email ${USER_EMAIL} \

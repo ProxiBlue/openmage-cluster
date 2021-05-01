@@ -15,7 +15,7 @@ OpenMage, PHP based eCommerce platform, is packaged as an advanced highly reliab
 - Lets Encrypt for SSL
 
 <p align="center"> 
-<img src="https://github.com/jelastic-jps/magento-cluster/blob/master/images/magento-topology.png" width="400">
+<img src="https://github.com/ProxiBlue/openmage-cluster/blob/main/images/topology.png" width="400">
 </p>
 
 ## Deployment to the Cloud
@@ -42,11 +42,6 @@ In the opened confirmation window at Jelastic dashboard:
 * set the OpenMage Locale, Timezone and Currency
 
 Then, select the preferable [region](https://docs.jelastic.com/environment-regions) (if several are available in your jelastic environment) and click on **Install**.
-
-<p align="center"> 
-<img src="https://github.com/jelastic-jps/magento-cluster/blob/master/images/magento-installation.png" width="400">
-</p>
-
 Once the deployment is finished, you’ll see the appropriate success pop-up with access credentials to your administration Magento panel, whilst the same information will be duplicated to your email box.
 
 <p align="center"> 
