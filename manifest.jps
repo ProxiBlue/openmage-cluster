@@ -47,11 +47,12 @@ settings:
     name: TIMEZONE
   - caption: "Install Let's Encrypt SSL with Auto-Renewal"
     type: list
+    values:
         value1: "yes"
         value2: "no"
     name: LE_ADDON
     required: true
-    value: true
+    value: yes
     tooltip: "Advanced integration with Let's Encrypt certificate authority that simplifies and automates the process of issuing, configuring and renewing trusted SSL certificates."
 
 success:
@@ -190,7 +191,7 @@ onInstall:
         protocol: https
     - install:
         jps: https://github.com/jelastic-jps/lets-encrypt/blob/stage/manifest.jps?_r=${fn.random}
-        envName: ${settings.envName}-1
+        envName: ${env.envName}
         nodeGroup: bl
         skipEmail: true
         settings:
