@@ -142,8 +142,9 @@ actions:
   composerOpenMage:
   - log: OpenMage Setup
   - cmd[${nodes.cp.first.id}]:
-      - wget ${globals.PATH}/scripts/composerOpenMage.sh -O /tmp/composer.sh && bash -x /tmp/composer.sh
-        ${globals.PATH} ${globals.MAGE_ROOT} &>> /var/log/run.log
+    - cd /tmp
+    - curl -O ${globals.PATH}scripts/composerOpenMage.sh
+    - bash -x /tmp/composerOpenMage.sh ${globals.PATH} ${globals.MAGE_ROOT} &>> /var/log/run.log
 
   setupCP:
   - log: App Servers Setup
