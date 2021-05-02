@@ -65,9 +65,9 @@ So now you can just click on the **Open in browser** button within the shown fra
 </p>
 
 * 1: Varnish based load balancer with external ip setup (https://hub.docker.com/r/jelastic/varnish/tags?page=1&ordering=last_updated)
-* 2: Multiple NGINX/PHP frontend which wills cale horizontally on load. (https://hub.docker.com/r/jelastic/nginxphp/tags?page=1&ordering=last_updated)
+* 2: Multiple NGINX/PHP frontend which wills scale horizontally on load. (https://hub.docker.com/r/jelastic/nginxphp/tags?page=1&ordering=last_updated)
 * 3: Multiple databases with primary -> replica replication (https://github.com/jelastic-jps/mysql-cluster/)
-* 4: Multiple redis services, one for cache, one for redis 
+* 4: Multiple redis services, one for cache, one for sessions
 * 5: Storage node.
 
 <p align="center"> 
