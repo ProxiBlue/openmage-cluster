@@ -62,7 +62,7 @@ success:
 
         * URL: https://${env.domain}
         * Admin panel URL: https://${env.domain}/${globals.ADMIN_URL}
-        * Admin name: ${globals.ROOT_PASSWD}
+        * Admin user: ${globals.ADMIN_USER}
         * Admin password: ${globals.ADMIN_PASSWD}
         * ROOT Password on Web Nodes: ${globals.ROOT_PASSWD}
         * NGINX Password on web nodes: ${globals.NGINX_PASSWD}
@@ -78,7 +78,7 @@ ssl: false
 skipNodeEmails: true
 nodes:
 - nodeType: nginxphp-dockerized
-  tag: 1.18.0-php-7.3.21
+  tag: 1.18.0-php-7.4.16
   count: 2
   cloudlets: 16
   nodeGroup: cp

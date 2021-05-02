@@ -1,7 +1,5 @@
 # Auto-Scalable OpenMage Cluster
 
-
-** Derived from https://github.com/jelastic-jps/magento-cluster
 ** Untested in production - use at own risk **
 
 OpenMage, PHP based eCommerce platform, is packaged as an advanced highly reliable and auto-scalable cluster on top of certified Jelastic dockerized stack templates with the following topology:
@@ -13,7 +11,7 @@ OpenMage, PHP based eCommerce platform, is packaged as an advanced highly reliab
 - **Redis Cache** node for content cache storing
 - [**Elastic Data Storage**](https://docs.jelastic.com/data-storage-container) node for media files
 - PHP 7.4
-- Lets Encrypt for SSL
+- Lets Encrypt for SSL on default jelastic domain upon install
 - Dynamic Admin Url for security
 
 <p align="center"> 
@@ -43,17 +41,52 @@ In the opened confirmation window at Jelastic dashboard:
 * optionally, customize its [Display Name](https://docs.jelastic.com/environment-aliases). 
 * set the OpenMage Locale, Timezone and Currency
 
+Admin email will be the Jelastic environment owner email
+
 Then, select the preferable [region](https://docs.jelastic.com/environment-regions) (if several are available in your jelastic environment) and click on **Install**.
 Once the deployment is finished, you’ll see the appropriate success pop-up with access credentials to your administration Magento panel, whilst the same information will be duplicated to your email box.
 
+So now you can just click on the **Open in browser** button within the shown frame and start filling your highly available and reliable Magento installation with the required content, being ready to handle as much users as your service requires.
+
+## After Install
+
+* [Bind a custom domain via cloudlets panel](https://docs.jelastic.com/custom-domains/#how-to-bind-domain-to-environment)
+* [Configure your DNS entry](https://docs.jelastic.com/custom-domains/#how-to-configure-dns-record)
+* [Add the domain to the Let's Encrypt plugin](https://jelastic.com/blog/free-ssl-certificates-with-lets-encrypt/) - do this on the Balancer
+* Set the domain in OpenMage admin
+* [Secure PHPMyqdmin](https://docs.jelastic.com/phpmyadmin-access/) - setup IP limits to the database nodes access to PHPMydmin - This must be done else your environment as a potential hack point
+
+
 <p align="center"> 
-<img src="https://github.com/jelastic-jps/magento-cluster/blob/master/images/magento-successful-install.png" width="400">
+<img src="https://github.com/ProxiBlue/openmage-cluster/blob/main/images/result.png">
+</p>
+<p align="center"> 
+<img src="https://github.com/ProxiBlue/openmage-cluster/blob/main/images/infra.png">
 </p>
 
-So now you can just click on the **Open in browser** button within the shown frame and start filling your highly available and reliable Magento installation with the required content, being ready to handle as much users as your service requires.
+1: Varnish based load balancer with external ip setup (https://hub.docker.com/r/jelastic/varnish/tags?page=1&ordering=last_updated)
+2: Multiple NGINX/PHP frontend which wills cale horizontally on load. (https://hub.docker.com/r/jelastic/nginxphp/tags?page=1&ordering=last_updated)
+3: Multiple databases with primary -> replica replication (https://github.com/jelastic-jps/mysql-cluster/)
+4: Multiple redis services, one for cache, one for redis 
+5: Storage node.
+
+<p align="center"> 
+<img src="https://github.com/ProxiBlue/openmage-cluster/blob/main/images/environment.png" width="400">
+</p>
+<p align="center"> 
+<img src="https://github.com/ProxiBlue/openmage-cluster/blob/main/images/load_alerts.png" width="400">
+</p>
+<p align="center"> 
+<img src="https://github.com/ProxiBlue/openmage-cluster/blob/main/images/scaling.png" width="400">
+</p>
+<p align="center"> 
+<img src="https://github.com/ProxiBlue/openmage-cluster/blob/main/images/firewall.png" width="400">
+</p>
 
 ## Customization  
 Fine tuning and customization: multi-cloud HA and DR, geo distributed load balancing, performance optimization, WAF, CDN and other required addons can be installed afterward [on demand](https://jelastic.com/managed-auto-scalable-clusters-for-business/).
 
-## Magento Managed Hosting Business
+## OpenMage Managed Hosting Business
 To start offering this solution to your customers please follow to [Auto-Scalable Clusters for Managed Cloud Business](https://jelastic.com/apaas/)
+
+** Derived from https://github.com/jelastic-jps/magento-cluster
