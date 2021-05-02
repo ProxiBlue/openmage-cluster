@@ -27,8 +27,8 @@ then
  cd /tmp
  tar -xf compressed-magento-sample-data-1.9.1.0.tgz
  mysql -u${DB_USER} -p${DB_PASS} -h ${DB_HOST} ${DB_NAME} < ./magento-sample-data-1.9.1.0/magento_sample_data_for_1.9.1.0.sql
- cp -rv magento-sample-data-1.9.1.0/media ${MG_PATH}/media
- cp -rv magento-sample-data-1.9.1.0/skin ${MG_PATH}/skin
+ cp -xa magento-sample-data-1.9.1.0/media/* ${MG_PATH}/media/
+ cp -xa magento-sample-data-1.9.1.0/skin/* ${MG_PATH}/skin/
  rm -rf compressed-magento-sample-data-1.9.1.0.tgz
  rm -rf magento-sample-data-1.9.1.0
 fi
