@@ -8,13 +8,14 @@ DB_HOST=$3
 DB_NAME=$4
 MG_ADMIN=$5
 MG_PATH=$6
-ENV_URL=$7
+ENV_DOMAIN=$7
 USER_EMAIL=$8
 ADMIN_FRONTNAME=$9
 ADMIN_USER=$10
 LOCALE=$11
 TIMEZONE=$12
 CURRENCY=$13
+ENV_NAME=$14
 
 $MYSQL -u${DB_USER} -p${DB_PASS} -h ${DB_HOST} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
 php -f ${MG_PATH}/install.php -- \
@@ -26,11 +27,11 @@ php -f ${MG_PATH}/install.php -- \
 --db_name ${DB_NAME} \
 --db_user ${DB_USER} \
 --db_pass ${DB_PASS} \
---url ${ENV_URL} \
+--url "https://${ENV_DOMAIN}" \
 --skip_url_validation "yes" \
 --use_rewrites "yes" \
 --use_secure "yes" \
---secure_base_url ${ENV_URL} \
+--secure_base_url "https://${ENV_DOMAIN}" \
 --use_secure_admin "yes" \
 --admin_firstname Admin \
 --admin_lastname AdminLast \
