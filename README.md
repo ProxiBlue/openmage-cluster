@@ -1,6 +1,7 @@
 # Auto-Scalable OpenMage Cluster
-# Derived from https://github.com/jelastic-jps/magento-cluster
 
+
+** Derived from https://github.com/jelastic-jps/magento-cluster
 ** Untested in production - use at own risk **
 
 OpenMage, PHP based eCommerce platform, is packaged as an advanced highly reliable and auto-scalable cluster on top of certified Jelastic dockerized stack templates with the following topology:
