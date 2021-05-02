@@ -16,7 +16,8 @@ LOCALE="${11}"
 TIMEZONE="${12}"
 CURRENCY="${13}"
 ENV_NAME="${14}"
-SAMPLE_DATA="${15}"
+LE_DATA="${15}"
+SAMPLE_DATA="${16}"
 
 $MYSQL -u${DB_USER} -p${DB_PASS} -h ${DB_HOST} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
 
@@ -41,11 +42,11 @@ php -f ${MG_PATH}/install.php -- \
 --db_name ${DB_NAME} \
 --db_user ${DB_USER} \
 --db_pass ${DB_PASS} \
---url "https://${ENV_DOMAIN}" \
+--url "${ENV_DOMAIN}" \
 --skip_url_validation "yes" \
 --use_rewrites "yes" \
 --use_secure "yes" \
---secure_base_url "https://${ENV_DOMAIN}" \
+--secure_base_url "${ENV_DOMAIN}" \
 --use_secure_admin "yes" \
 --admin_firstname Admin \
 --admin_lastname AdminLast \

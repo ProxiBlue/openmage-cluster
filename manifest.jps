@@ -159,7 +159,14 @@ onInstall:
 - log: Load balancer Setup
 - setupBL:
     filter: bl
-
+- if ('${settings.le_addon:true}' == 'false'):
+    - install:
+        jps: https://github.com/jelastic-jps/lets-encrypt/blob/stage/manifest.jps
+        envName: ${env.envName}
+        nodeGroup: bl
+        skipEmail: true
+        settings:
+          customDomains: ""
 - log: Envs Setup for CP layer
 - setEnvs:
     filter: cp
@@ -200,15 +207,7 @@ onInstall:
 - cmd[${nodes.cp.first.id}]:
     - wget ${globals.PATH}/configs/varnish/varnish-probe.php -O ${globals.MAGE_ROOT}/health_check.php
     - wget ${globals.PATH}/scripts/setupOpenMage.sh -O /tmp/setup.sh
-    - bash -x /tmp/setup.sh ${globals.DB_USER} ${globals.DB_PASS} DB_MASTER ${globals.DB_NAME} ${globals.ADMIN_PASSWD} ${globals.MAGE_ROOT} ${env.domain} ${user.email} "${globals.ADMIN_URL}" ${globals.MG_ADMIN_USER} ${settings.LOCALE} ${settings.TIMEZONE} ${settings.CURRENCY} ${env.envName} ${settings.le_addon:false} &>> /var/log/run.log
-- if ('${settings.le_addon:true}' == 'false'):
-    - install:
-        jps: https://github.com/jelastic-jps/lets-encrypt/blob/stage/manifest.jps
-        envName: ${env.envName}
-        nodeGroup: bl
-        skipEmail: true
-        settings:
-          customDomains: ""
+    - bash -x /tmp/setup.sh ${globals.DB_USER} ${globals.DB_PASS} DB_MASTER ${globals.DB_NAME} ${globals.ADMIN_PASSWD} ${globals.MAGE_ROOT} ${env.url} ${user.email} "${globals.ADMIN_URL}" ${globals.MG_ADMIN_USER} ${settings.LOCALE} ${settings.TIMEZONE} ${settings.CURRENCY} ${env.envName} ${settings.le_addon:false} ${settings.SAMPLE_DATA:false} &>> /var/log/run.log
 
 actions:
   composerOpenMage:
