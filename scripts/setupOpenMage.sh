@@ -11,7 +11,7 @@ MG_PATH=$6
 ENV_DOMAIN=$7
 USER_EMAIL=$8
 ADMIN_FRONTNAME=$9
-ADMIN_USER=$10
+MG_ADMIN_USER=$10
 LOCALE=$11
 TIMEZONE=$12
 CURRENCY=$13
@@ -36,7 +36,7 @@ php -f ${MG_PATH}/install.php -- \
 --admin_firstname Admin \
 --admin_lastname AdminLast \
 --admin_email ${USER_EMAIL} \
---admin_username ${ADMIN_USER} \
+--admin_username ${MG_ADMIN_USER} \
 --admin_password ${MG_ADMIN} \
 --admin_frontname ${ADMIN_FRONTNAME};
 #$SED -i 's|getBlock(\$callback\[0\])->\$callback\[1\]|getBlock(\$callback\[0\])->{\$callback\[1\]}|g' ${MG_PATH}/app/code/core/Mage/Core/Model/Layout.php;
