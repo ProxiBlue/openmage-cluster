@@ -197,7 +197,7 @@ onInstall:
 - cmd[${nodes.cp.first.id}]:
     - wget ${globals.PATH}/configs/varnish/varnish-probe.php -O ${globals.MAGE_ROOT}/health_check.php
     - wget ${globals.PATH}/scripts/setupOpenMage.sh -O /tmp/setup.sh
-    - bash -x /tmp/setup.sh ${globals.DB_USER} ${globals.DB_PASS} DB_MASTER ${globals.DB_NAME} ${globals.ADMIN_PASSWD} ${globals.MAGE_ROOT} ${env.domain} ${user.email} ${globals.ADMIN_URL} ${globals.MG_ADMIN_USER} ${settings.LOCALE} ${settings.TIMEZONE} ${settings.CURRENCY} ${env.envName} &>> /var/log/run.log
+    - bash -x /tmp/setup.sh ${globals.DB_USER} ${globals.DB_PASS} DB_MASTER ${globals.DB_NAME} ${globals.ADMIN_PASSWD} ${globals.MAGE_ROOT} ${env.domain} ${user.email} "${globals.ADMIN_URL}" ${globals.MG_ADMIN_USER} ${settings.LOCALE} ${settings.TIMEZONE} ${settings.CURRENCY} ${env.envName} &>> /var/log/run.log
 - install:
     jps: https://github.com/jelastic-jps/lets-encrypt/blob/stage/manifest.jps
     envName: ${env.envName}
