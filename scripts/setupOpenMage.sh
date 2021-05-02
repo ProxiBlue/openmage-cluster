@@ -16,8 +16,21 @@ LOCALE="${11}"
 TIMEZONE="${12}"
 CURRENCY="${13}"
 ENV_NAME="${14}"
+SAMPLE_DATA="${15}"
 
 $MYSQL -u${DB_USER} -p${DB_PASS} -h ${DB_HOST} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
+
+if [ ${SAMPLE_DATA} == 'true' ]
+then
+ echo "INSTALLING SAMPLE DATA"
+ cd /tmp
+ tar -xf compressed-magento-sample-data-1.9.1.0.tgz
+ mysql -u${DB_USER} -p${DB_PASS} -h ${DB_HOST} < ./magento-sample-data-1.9.1.0/magento_sample_data_for_1.9.1.0.sql
+ cp -rv magento-sample-data-1.9.1.0/media ${globals.MAGE_ROOT}/media
+ rm -rf magento-sample-data-1.9.1.0/skin ${globals.MAGE_ROOT}/skin
+ rm -rf compressed-magento-sample-data-1.9.1.0.tgz
+fi
+
 php -f ${MG_PATH}/install.php -- \
 --license_agreement_accepted "yes" \
 --locale ${LOCALE} \
