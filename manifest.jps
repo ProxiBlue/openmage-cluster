@@ -40,17 +40,17 @@ settings:
   - caption: "Select Timezone"
     type: list
     values:
-        value1: "America/Los_Angeles"
-        value2: "Europe/London"
-        value3: "Australia/Sydney"
+        "America/Los_Angeles": "America/Los_Angeles"
+        "Europe/London": "Europe/London"
+        "Australia/Sydney": "Australia/Sydney"
     required: true
     name: TIMEZONE
   - caption: "Select Currency"
     type: list
     values:
-        value1: USD
-        value2: GBP
-        value3: AUD
+        USD: USD
+        GBP: GBP
+        AUD: AUD
     required: true
     name: CURRENCY
 
