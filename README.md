@@ -1,6 +1,6 @@
 # Auto-Scalable OpenMage Cluster
 
-** Untested in production - use at own risk **
+** Untested in production - use at own risk ** - That said, this environment is heavily based on the production ready [Jelastic Magento environment](https://github.com/jelastic-jps/magento-cluster). There is a high confidence in its stability
 
 OpenMage, PHP based eCommerce platform, is packaged as an advanced highly reliable and auto-scalable cluster on top of certified Jelastic dockerized stack templates with the following topology:
 
@@ -10,9 +10,14 @@ OpenMage, PHP based eCommerce platform, is packaged as an advanced highly reliab
 - **Redis Sessions** node to retain user session parameters
 - **Redis Cache** node for content cache storing
 - [**Elastic Data Storage**](https://docs.jelastic.com/data-storage-container) node for media files
+
+Other features:
+
 - PHP 7.4
 - Lets Encrypt for SSL on default jelastic domain upon install
-- Dynamic Admin Url for security
+- Dynamic Admin Url
+- N98-MageRun installed
+- Fully composer based install
 
 <p align="center"> 
 <img src="https://github.com/ProxiBlue/openmage-cluster/blob/main/images/topology.png" width="400">
@@ -89,4 +94,3 @@ Fine tuning and customization: multi-cloud HA and DR, geo distributed load balan
 ## OpenMage Managed Hosting Business
 To start offering this solution to your customers please follow to [Auto-Scalable Clusters for Managed Cloud Business](https://jelastic.com/apaas/)
 
-** Derived from https://github.com/jelastic-jps/magento-cluster

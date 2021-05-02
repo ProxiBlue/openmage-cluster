@@ -53,6 +53,15 @@ settings:
         AUD: AUD
     required: true
     name: CURRENCY
+  - caption: Skip Install Let's Encrypt SSL with Auto-Renewal?
+    type: checkbox
+    name: le_addon
+    value: false
+    tooltip: "Advanced integration with Let's Encrypt certificate authority that simplifies and automates the process of issuing, configuring and renewing trusted SSL certificates."
+  - caption: Install Sample Data?
+    type: checkbox
+    name: SAMPLE_DATA
+    value: false
 
 success:
     text: |
@@ -170,24 +179,15 @@ onInstall:
 - cmd[storage]:
   - mkdir -p /data/
   - chown 700:700 -Rh /data/
-- log: Install composer
+- log: Root Commands
 - forEach(nodes.cp):
-    cmd[${this.filter}]:
+    cmd[${@i.id}]:
       - yum install composer
-    user: root
-- log: Downgrade composer
-- forEach(nodes.cp):
-    cmd[${this.filter}]:
       - composer self-update --1
-    user: root
-- log: Set root password
-- forEach(nodes.cp):
-    cmd[${this.filter}]:
-      - echo ${globals.ROOT_PASSWD}| passwd --stdin root &>> /var/log/run.log
-    user: root
-- forEach(nodes.cp):
-    cmd[${this.filter}]:
       - echo ${globals.NGINX_PASSWD}| passwd --stdin nginx &>> /var/log/run.log
+      - echo ${globals.ROOT_PASSWD}| passwd --stdin root &>> /var/log/run.log
+      - wget -q --no-verbose --no-check-certificate https://files.magerun.net/n98-magerun.phar -O /usr/bin/n98-magerun &>> /var/log/run.log
+      - chmod +x /usr/bin/n98-magerun
     user: root
 - composerOpenMage
 - cmd[storage]: wget ${globals.PATH}/configs/openmage/local.xml.template -O /data/app/etc/local.xml.template
@@ -198,13 +198,18 @@ onInstall:
     - wget ${globals.PATH}/configs/varnish/varnish-probe.php -O ${globals.MAGE_ROOT}/health_check.php
     - wget ${globals.PATH}/scripts/setupOpenMage.sh -O /tmp/setup.sh
     - bash -x /tmp/setup.sh ${globals.DB_USER} ${globals.DB_PASS} DB_MASTER ${globals.DB_NAME} ${globals.ADMIN_PASSWD} ${globals.MAGE_ROOT} ${env.domain} ${user.email} "${globals.ADMIN_URL}" ${globals.MG_ADMIN_USER} ${settings.LOCALE} ${settings.TIMEZONE} ${settings.CURRENCY} ${env.envName} &>> /var/log/run.log
-- install:
-    jps: https://github.com/jelastic-jps/lets-encrypt/blob/stage/manifest.jps
-    envName: ${env.envName}
-    nodeGroup: bl
-    skipEmail: true
-    settings:
-      customDomains: ""
+- if ('${settings.le_addon:false}' == 'true'):
+    - cmd[${nodes.cp.first.id}]:
+        - cd ${globals.MAGE_ROOT}
+        - bash n98-magerun –installSampleData=yes
+- if ('${settings.le_addon:true}' == 'false'):
+    - install:
+        jps: https://github.com/jelastic-jps/lets-encrypt/blob/stage/manifest.jps
+        envName: ${env.envName}
+        nodeGroup: bl
+        skipEmail: true
+        settings:
+          customDomains: ""
 
 actions:
   composerOpenMage:
@@ -220,8 +225,8 @@ actions:
       wget ${globals.PATH}/configs/nginx/site-default-openmage.conf -O /etc/nginx/conf.d/site-default.conf
       wget ${globals.PATH}/configs/nginx/nginx.conf -O /etc/nginx/nginx.conf
       wget ${globals.PATH}/configs/php/extensions.ini -O /etc/php.d/extensions.ini
+      echo "client_max_body_size 20M;" >>/etc/nginx/conf.d/client_max_body_size.conf
       sudo /etc/init.d/nginx restart &>> /var/log/run.log
-
   setEnvs:
   - forEach(i:nodes.sqldb):
     - if (${@i.ismaster}):
