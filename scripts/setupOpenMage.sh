@@ -15,7 +15,7 @@ MG_ADMIN_USER="${10}"
 LOCALE="${11}"
 TIMEZONE="${12}"
 CURRENCY="${13}"
-ENV_NAME=""${14}"
+ENV_NAME="${14}"
 
 $MYSQL -u${DB_USER} -p${DB_PASS} -h ${DB_HOST} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
 php -f ${MG_PATH}/install.php -- \
