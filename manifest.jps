@@ -32,9 +32,9 @@ settings:
   - caption: "Select Locale"
     type: list
     values:
-        value1: en_US
-        value2: en_GB
-        value3: en_AU
+        en_US: en_US
+        en_GB: en_GB
+        en_AU: en_AU
     required: true
     name: LOCALE
   - caption: "Select Timezone"
