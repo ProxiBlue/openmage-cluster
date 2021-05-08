@@ -28,10 +28,13 @@ globals:
   MG_ADMIN_USER: admin-${fn.random}
 
 settings:
-  prepopulate: https://raw.githubusercontent.com/ProxiBlue/openmage-cluster/main/settings/populate.txt
   fields:
   - caption: "Select Locale"
     type: list
+    values:
+        en_US: en_US
+        en_GB: en_GB
+        en_AU: en_AU
     required: true
     name: LOCALE
   - caption: "Select Timezone"
