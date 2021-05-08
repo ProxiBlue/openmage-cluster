@@ -28,7 +28,7 @@ globals:
   MG_ADMIN_USER: admin-${fn.random}
 
 settings:
-  prepopulate: https://raw.githubusercontent.com/ProxiBlue/openmage-cluster/main/scripts/locales.php
+  prepopulate: https://raw.githubusercontent.com/ProxiBlue/openmage-cluster/main/setings/locales
   fields:
   - caption: "Select Locale"
     type: list
