@@ -28,6 +28,7 @@ globals:
   MG_ADMIN_USER: admin-${fn.random}
 
 settings:
+  prepopulate: https://raw.githubusercontent.com/ProxiBlue/openmage-cluster/main/scripts/locales.php
   fields:
   - caption: "Select Locale"
     type: list
@@ -56,12 +57,19 @@ settings:
   - caption: Skip Install Let's Encrypt SSL with Auto-Renewal?
     type: checkbox
     name: le_addon
-    value: false
+    value: true
     tooltip: "Advanced integration with Let's Encrypt certificate authority that simplifies and automates the process of issuing, configuring and renewing trusted SSL certificates."
   - caption: Install Sample Data?
     type: checkbox
     name: SAMPLE_DATA
-    value: false
+    value: true
+  - caption: "PHP Version"
+    type: list
+    values:
+        1.18.0-php-7.4.16 : 7.4
+    required: true
+    name: PHP_VERSION
+    value: 1.18.0-php-7.4.16
 
 success:
     text: |
@@ -87,7 +95,7 @@ ssl: false
 skipNodeEmails: true
 nodes:
 - nodeType: nginxphp-dockerized
-  tag: 1.18.0-php-7.4.16
+  tag: ${settings.PHP_VERSION}
   count: 2
   cloudlets: 16
   nodeGroup: cp
@@ -195,13 +203,16 @@ onInstall:
       - echo ${globals.ROOT_PASSWD}| passwd --stdin root &>> /var/log/run.log
       - wget -q --no-verbose --no-check-certificate https://files.magerun.net/n98-magerun.phar -O /usr/bin/n98-magerun &>> /var/log/run.log
       - chmod +x /usr/bin/n98-magerun
+      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &>> /var/log/run.log
+      - unzip awscliv2.zip &>> /var/log/run.log
+      - ./aws/install &>> /var/log/run.log
     user: root
 - composerOpenMage
 - cmd[storage]: wget ${globals.PATH}/configs/openmage/local.xml.template -O /data/app/etc/local.xml.template
 - setupRDConnect:
     config: /data/app/etc/local.xml.template
 - setupCP
-- if ('${settings.le_addon:false}' == 'true'):
+- if ('${settings.SAMPLE_DATA:false}' == 'true'):
     - cmd[${nodes.cp.first.id}]:
         - wget ${globals.PATH}/sampledata/compressed-magento-sample-data-1.9.1.0.tgz -O /tmp/compressed-magento-sample-data-1.9.1.0.tgz
 - cmd[${nodes.cp.first.id}]:

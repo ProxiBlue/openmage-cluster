@@ -17,7 +17,8 @@ Other features:
 - Lets Encrypt for SSL on default jelastic domain upon install
 - Dynamic Admin Url
 - N98-MageRun installed
-- Fully composer based install
+- Fully composer based install OpenMage
+- awscli tool install on frontend nodes
 
 <p align="center"> 
 <img src="https://github.com/ProxiBlue/openmage-cluster/blob/main/images/topology.png" width="400">
