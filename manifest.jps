@@ -32,10 +32,6 @@ settings:
   fields:
   - caption: "Select Locale"
     type: list
-    values:
-        en_US: en_US
-        en_GB: en_GB
-        en_AU: en_AU
     required: true
     name: LOCALE
   - caption: "Select Timezone"
