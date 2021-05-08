@@ -36,18 +36,10 @@ settings:
     name: LOCALE
   - caption: "Select Timezone"
     type: list
-    values:
-        "America/Los_Angeles": "America/Los_Angeles"
-        "Europe/London": "Europe/London"
-        "Australia/Sydney": "Australia/Sydney"
     required: true
     name: TIMEZONE
   - caption: "Select Currency"
     type: list
-    values:
-        USD: USD
-        GBP: GBP
-        AUD: AUD
     required: true
     name: CURRENCY
   - caption: Skip Install Let's Encrypt SSL with Auto-Renewal?
